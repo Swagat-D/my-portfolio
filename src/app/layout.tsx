@@ -8,7 +8,7 @@ const calistoga  =  Calistoga ({ subsets: ['latin'], variable:  "--font-serif", 
 
 
 export const metadata: Metadata = {
-  title: "My Portfolio",
+  title: "Swagat Kumar Dash",
   description: "Portfolio Which describes all my skills in one place",
 };
 
