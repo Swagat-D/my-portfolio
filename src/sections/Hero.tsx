@@ -67,8 +67,8 @@ export const HeroSection = () => {
       </div>
       </div>
       <div className='max-w-lg mx-auto'>
-        <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide'>Building Exceptional User Experience</h1>
-        <p className='mt-4 text-center  text-white/60 md:text-lg'>I  specialize in transforming designs into functional, high-performing web applications. Let&apos;s discuss your next project.</p>
+        <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide'>Crafting Scalable Full Stack Solutions for the Modern Web</h1>
+        <p className='mt-4 text-center  text-white/60 md:text-lg'>I build high-performance web applications with clean UI and scalable backend systems. From concept to deployment, I turn ideas into reliable full stack solutions. Let&apos;s build something powerful together.</p>
       </div>
       <div className='flex flex-col md:flex-row justify-center items-center mt-8 gap-4'>
         <button className='inline-flex items-center gap-2 border border-white/15 px-6 h-12 rounded-xl '>
