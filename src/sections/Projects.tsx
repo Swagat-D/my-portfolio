@@ -6,20 +6,9 @@ import CheckCircleIcon from "@/assets/icons/check-circle.svg"
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import grainImage from "@/assets/images/grain.jpg"
 import { SectionHeader } from "@/components/SectionHeader";
+import GithubIcon from "@/assets/icons/github.svg"
 
 const portfolioProjects = [
-  {
-    company: "Acme Corp",
-    year: "2022",
-    title: "Dark Saas Landing Page",
-    results: [
-      { title: "Enhanced user experience by 40%" },
-      { title: "Improved site speed by 50%" },
-      { title: "Increased mobile traffic by 35%" },
-    ],
-    link: "https://youtu.be/4k7IdSLxh6w",
-    image: darkSaasLandingPage,
-  },
   {
     company: "Innovative Co",
     year: "2021",
@@ -31,6 +20,18 @@ const portfolioProjects = [
     ],
     link: "https://youtu.be/7hi5zwO75yc",
     image: lightSaasLandingPage,
+  },
+  {
+    company: "Domain Project",
+    year: "2024",
+    title: "Personal Finance Tracker",
+    results: [
+      { title: "Built with Spring Boot & Angular.js" },
+      { title: "Track & Categorize Expenses" },
+      { title: "Set Budgets & Goals" },
+    ],
+    link: "https://github.com/Swagat-D/FinTrack",
+    image: darkSaasLandingPage,
   },
   {
     company: "Quantum Dynamics",
@@ -82,7 +83,8 @@ export const ProjectsSection = () => {
             </ul>
             <a href={project.link}>
               <button className="bg-white text-gray-950 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8 md:w-auto px-6">
-                <span>Visit Live Site</span>
+                <GithubIcon className="size-5" />
+                <span>Github Repo</span>
                 <ArrowUpRightIcon className="size-4"/>
               </button>
             </a>

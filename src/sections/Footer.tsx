@@ -3,19 +3,19 @@ import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 const footerLinks = [
   {
     title: 'Github',
-    href:'#'
+    href:'https://github.com/Swagat-D'
   },
   {
     title: 'LinkedIn',
-    href:'#'
+    href:'https://www.linkedin.com/in/swagatdash15'
   },
   {
     title: 'Instagram',
-    href:'#'
+    href:'https://www.instagram.com/_swagat_dash_'
   },
   {
     title: 'Twitter',
-    href:'#'
+    href:'https://x.com/swagatdash164'
   }
 ]
 
@@ -27,7 +27,7 @@ export const Footer = () => {
         <div className="text-white/40">&copy; 2025 All rights reserved</div>
         <nav className="flex flex-col md:flex-row items-center gap-8">
           {footerLinks.map(link => (
-            <a href="#" key={link.title} className="inline-flex items-center gap-1.5">
+            <a href={link.href} key={link.title} className="inline-flex items-center gap-1.5">
               <span className="font-semibold">{link.title}</span>
               <ArrowUpRightIcon className="size-4"/>
             </a>
