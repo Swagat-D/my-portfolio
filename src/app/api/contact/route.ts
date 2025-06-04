@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
             
             <p style="color: #6b7280; line-height: 1.6; margin: 20px 0 0 0;">
               Best regards,<br>
-              <strong style="color: #374151;">Your Name</strong>
+              <strong style="color: #374151;">Swagat Kumar Dash</strong>
             </p>
           </div>
           
