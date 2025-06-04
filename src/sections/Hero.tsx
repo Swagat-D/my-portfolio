@@ -18,10 +18,9 @@ export const HeroSection = () => {
   const ballRef = useRef<HTMLDivElement>(null)
   const switchRef = useRef<HTMLDivElement>(null)
 
-  const introText = "Hi, my name is Swagat. I am a Software Engineer."
-  const mainText = "Crafting Scalable Full Stack Solutions for the Modern Web"
+  const introText = "Hello World! I'm Swagat Kumar Dash"
+  const mainText = "Crafting Digital Experiences with Code & Creativity"
 
-  // Improved animation for intro text
   useEffect(() => {
     let index = 0
     const timer = setInterval(() => {
@@ -30,17 +29,15 @@ export const HeroSection = () => {
         index++
       } else {
         clearInterval(timer)
-        // Wait a bit then show main text
         setTimeout(() => {
           setShowMainText(true)
-        }, 700)
+        }, 500)
       }
-    }, 80) // Slightly faster typing
+    }, 50) // Faster typing speed
 
     return () => clearInterval(timer)
   }, [])
 
-  // Scroll effect for switch - moved trigger points higher
   useEffect(() => {
     const handleScroll = () => {
       const heroSection = document.querySelector(".hero-section")
@@ -49,14 +46,14 @@ export const HeroSection = () => {
         const heroHeight = rect.height
         const scrollProgress = Math.abs(rect.top) / heroHeight
 
-        // Show switch earlier (at 40% instead of 60%) and keep it visible longer
-        if (scrollProgress >= 0.4 && scrollProgress <= 1.3) {
+        if (scrollProgress >= 0.3 && scrollProgress <= 1.4) {
           setShowSwitch(true)
-          // Animate ball position based on scroll progress
           if (ballRef.current) {
-            const ballProgress = Math.min((scrollProgress - 0.4) / 0.4, 1) // Normalize between 0.4-0.8
-            const ballY = 120 - ballProgress * 120 // Move from bottom (120) to top (0)
+            const ballProgress = Math.min((scrollProgress - 0.3) / 0.5, 1)
+            const ballY = 120 - (ballProgress * 120)
+            // Add smooth easing
             ballRef.current.style.transform = `translateY(${ballY}px)`
+            ballRef.current.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
           }
         } else {
           setShowSwitch(false)
@@ -64,14 +61,11 @@ export const HeroSection = () => {
       }
     }
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Switch animation - removed manual animation since scroll handles it
   const animateSwitch = () => {
-    // Optional: Add click feedback without changing position
-    // since position is controlled by scroll
     if (switchRef.current) {
       switchRef.current.style.transform = "scale(0.95)"
       setTimeout(() => {
@@ -82,7 +76,6 @@ export const HeroSection = () => {
     }
   }
 
-  // Working CV download method
   const handleDirectDownload = () => {
     setIsDownloading(true)
     try {
@@ -99,7 +92,6 @@ export const HeroSection = () => {
     }
   }
 
-  // Scroll to contact section
   const scrollToContact = () => {
     const contactSection = document.querySelector("#contact")
     if (contactSection) {
@@ -309,7 +301,6 @@ export const HeroSection = () => {
           </div>
 
           <div className="max-w-lg mx-auto">
-            {/* Improved animated intro text with smoother typewriter effect */}
             <div className="text-xl md:text-2xl text-center mt-8 mb-4 h-16 flex items-center justify-center">
               <div className="text-emerald-300 font-medium">
                 {currentText}
@@ -317,7 +308,6 @@ export const HeroSection = () => {
               </div>
             </div>
 
-            {/* Improved main animated text with better stagger timing */}
             {showMainText && (
               <h1 className="font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide leading-tight">
                 {mainText.split(" ").map((word, index) => (
@@ -358,7 +348,7 @@ export const HeroSection = () => {
               >
                 {isDownloading ? (
                   <>
-                    <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4\" fill="none\" viewBox="0 0 24 24">
                       <circle
                         className="opacity-25"
                         cx="12"
@@ -394,7 +384,6 @@ export const HeroSection = () => {
           )}
         </div>
 
-        {/* Animated Switch - positioned higher to avoid being hidden */}
         <div className={`switch-container ${showSwitch ? "visible" : ""}`}>
           <div ref={switchRef} className="switch" onClick={animateSwitch}>
             <div ref={ballRef} className="ball" />

@@ -7,11 +7,17 @@ export const Header = () => {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
 
+  const scrollToSection = (id: string) => {
+    const element = document.querySelector(id)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" })
+    }
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
       
-      // Show header when scrolling up or at top
       if (currentScrollY < lastScrollY || currentScrollY < 100) {
         setIsVisible(true)
       } else {
@@ -33,13 +39,13 @@ export const Header = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="fixed top-3 w-full z-50 flex justify-center items-center"
+          className="fixed top-6 w-full z-50 flex justify-center items-center px-4"
         >
-          <nav className="flex p-0.5 border bg-gray-900/80 backdrop-blur-lg border-white/15 rounded-full shadow-lg shadow-black/20">
-            <a href="#" className="nav-item">Home</a>
-            <a href="#projects" className="nav-item">Projects</a>
-            <a href="#about" className="nav-item">About</a>
-            <a href="#contact" className="nav-item bg-white text-gray-900 hover:bg-white/90 hover:text-gray-900">Contact</a>
+          <nav className="flex p-1 border bg-gray-900/70 backdrop-blur-lg border-white/10 rounded-full shadow-lg shadow-black/20">
+            <button onClick={() => scrollToSection("#home")} className="nav-item">Home</button>
+            <button onClick={() => scrollToSection("#projects")} className="nav-item">Projects</button>
+            <button onClick={() => scrollToSection("#about")} className="nav-item">About</button>
+            <button onClick={() => scrollToSection("#contact")} className="nav-item bg-white text-gray-900 hover:bg-white/90 hover:text-gray-900">Contact</button>
           </nav>
         </motion.div>
       )}
