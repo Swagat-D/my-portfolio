@@ -97,7 +97,6 @@ const bhubaneswarFacts = [
   { icon: "🦎", text: "Cave Heritage" },
 ]
 
-// Book reading progress and reviews
 const bookStats = [
   { label: "Pages Read", value: "2,847", icon: "📖" },
   { label: "Books This Year", value: "12", icon: "📚" },
@@ -111,7 +110,6 @@ export const AboutSection = () => {
 
   const handleMapClick = () => {
     setShowLocationInfo(true)
-    // Auto hide after 5 seconds
     setTimeout(() => {
       setShowLocationInfo(false)
     }, 5000)
@@ -127,95 +125,71 @@ export const AboutSection = () => {
         />
         <div className="mt-20 flex flex-col gap-8">
           <div className="md:grid md:grid-cols-5 md:gap-8 lg:grid-cols-3">
-            {/* Enhanced My Reads Card */}
-            <Card className="h-[320px] col-span-2 lg:col-span-1 overflow-hidden">
+            <Card className="h-[320px] col-span-2 lg:col-span-1 overflow-hidden group">
               <CardHeader title="My Reads" description="Explore the books shaping my perspectives." />
-
+              
               <div className="relative">
-                {/* Book Image with Hover Effects */}
                 <motion.div
-                  className="w-40 mx-auto mt-4 relative"
-                  onHoverStart={() => setBookHovered(true)}
-                  onHoverEnd={() => setBookHovered(false)}
+                  className="w-40 mx-auto mt-4 relative cursor-pointer"
                   whileHover={{ scale: 1.05, rotateY: 15 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <Image src={bookImage || "/placeholder.svg"} alt="Book Cover" className="relative z-10" />
-
-                  {/* Floating particles around book */}
-                  <AnimatePresence>
-                    {bookHovered && (
-                      <>
-                        {[...Array(6)].map((_, i) => (
-                          <motion.div
-                            key={i}
-                            initial={{ opacity: 0, scale: 0 }}
-                            animate={{
-                              opacity: [0, 1, 0],
-                              scale: [0, 1, 0],
-                              x: [0, (Math.random() - 0.5) * 100],
-                              y: [0, (Math.random() - 0.5) * 100],
-                            }}
-                            exit={{ opacity: 0, scale: 0 }}
-                            transition={{
-                              duration: 2,
-                              delay: i * 0.2,
-                              repeat: Number.POSITIVE_INFINITY,
-                              repeatDelay: 1,
-                            }}
-                            className="absolute top-1/2 left-1/2 w-2 h-2 bg-emerald-300 rounded-full"
-                          />
-                        ))}
-                      </>
-                    )}
-                  </AnimatePresence>
+                  <Image 
+                    src={bookImage} 
+                    alt="Book Cover" 
+                    className="relative z-10 rounded-lg shadow-xl transition-shadow duration-300 group-hover:shadow-emerald-300/20" 
+                  />
+                  
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-tr from-emerald-300/20 to-sky-400/20 rounded-lg blur-xl"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute size-2 bg-emerald-300 rounded-full"
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{
+                        opacity: [0, 1, 0],
+                        scale: [0, 1, 0],
+                        x: [0, (Math.random() - 0.5) * 100],
+                        y: [0, (Math.random() - 0.5) * 100],
+                      }}
+                      transition={{
+                        duration: 2,
+                        delay: i * 0.2,
+                        repeat: Infinity,
+                        repeatDelay: 1,
+                      }}
+                    />
+                  ))}
                 </motion.div>
 
-                {/* Reading Stats */}
-                <motion.div
-                  className="mt-4 space-y-2"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                >
+                <motion.div className="mt-6 space-y-3">
                   {bookStats.map((stat, index) => (
                     <motion.div
                       key={stat.label}
+                      className="flex items-center justify-between text-xs bg-white/5 rounded-lg p-2"
                       initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
-                      className="flex items-center justify-between text-xs"
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 + index * 0.1 }}
+                      whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.1)" }}
                     >
                       <div className="flex items-center gap-2">
-                        <span>{stat.icon}</span>
+                        <span className="text-lg">{stat.icon}</span>
                         <span className="text-white/70">{stat.label}</span>
                       </div>
-                      <motion.span className="font-semibold text-emerald-300" whileHover={{ scale: 1.1 }}>
+                      <motion.span 
+                        className="font-semibold text-emerald-300"
+                        whileHover={{ scale: 1.1 }}
+                      >
                         {stat.value}
                       </motion.span>
                     </motion.div>
                   ))}
-                </motion.div>
-
-                {/* Reading Progress Bar */}
-                <motion.div
-                  className="mt-3"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
-                >
-                  <div className="flex justify-between text-xs text-white/60 mb-1">
-                    <span>Current Read</span>
-                    <span>73%</span>
-                  </div>
-                  <div className="w-full bg-white/10 rounded-full h-2">
-                    <motion.div
-                      className="bg-gradient-to-r from-emerald-300 to-sky-400 h-2 rounded-full"
-                      initial={{ width: 0 }}
-                      whileInView={{ width: "73%" }}
-                      transition={{ delay: 0.8, duration: 1, ease: "easeOut" }}
-                    />
-                  </div>
                 </motion.div>
               </div>
             </Card>
@@ -271,7 +245,6 @@ export const AboutSection = () => {
                 onClick={handleMapClick}
               />
 
-              {/* Location Pin */}
               <div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20 rounded-full after:content-[''] after:absolute after:inset-0 after:outline after:outline-2 after:outline-offset-2 after:rounded-full after:outline-gray-950/30 cursor-pointer"
                 onClick={handleMapClick}
@@ -281,7 +254,6 @@ export const AboutSection = () => {
                 <Image src={smileemoji || "/placeholder.svg"} alt="smiling emoji" className="size-20" />
               </div>
 
-              {/* Location Info Popup */}
               <AnimatePresence>
                 {showLocationInfo && (
                   <motion.div
@@ -297,7 +269,6 @@ export const AboutSection = () => {
                       transition={{ delay: 0.1 }}
                       className="text-center space-y-3 w-full max-w-full"
                     >
-                      {/* Header */}
                       <div className="space-y-1">
                         <div className="text-lg font-bold text-white flex items-center justify-center gap-1">
                           <span>📍</span>
@@ -306,7 +277,6 @@ export const AboutSection = () => {
                         <div className="text-xs text-emerald-300 font-medium">Temple City of India</div>
                       </div>
 
-                      {/* Facts Grid */}
                       <div className="grid grid-cols-2 gap-1.5 w-full">
                         {bhubaneswarFacts.map((fact, index) => (
                           <motion.div
@@ -322,7 +292,6 @@ export const AboutSection = () => {
                         ))}
                       </div>
 
-                      {/* Quote */}
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -332,7 +301,6 @@ export const AboutSection = () => {
                         &quot;Where ancient heritage meets modern innovation&quot;
                       </motion.div>
 
-                      {/* Close Button */}
                       <motion.button
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -347,7 +315,6 @@ export const AboutSection = () => {
                 )}
               </AnimatePresence>
 
-              {/* Hint Text */}
               {!showLocationInfo && (
                 <div className="absolute bottom-2 left-2 right-2 text-center">
                   <div className="text-xs text-white/70 bg-black/60 rounded-full px-3 py-1 backdrop-blur-sm">
