@@ -11,21 +11,85 @@
     @apply absolute inset-0 border-2 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-emerald-300/5 shadow-[0_0_80px_inset] shadow-emerald-300/5;
   }
 
-  .switch-container {
-    @apply fixed bottom-[15%] left-[5%] z-50 opacity-0 transition-opacity duration-500 md:left-[10%];
+  .text-responsive {
+    @apply text-sm sm:text-base md:text-lg
   }
 
-  .switch {
-    @apply w-[70px] h-[180px] bg-gray-800/40 backdrop-blur-md border border-emerald-300/30 flex items-start rounded-[45px] p-2 cursor-pointer shadow-lg transition-all duration-300;
+  .heading-responsive {
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
   }
 
-  .ball {
-    @apply w-[54px] h-[54px] bg-gradient-to-tr from-emerald-300 to-emerald-400 rounded-[27px] shadow-lg transition-transform duration-300 ease-in-out;
+  .section-padding {
+    @apply py-12 sm:py-16 lg:py-24;
   }
+  
+  .container-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Mobile touch targets */
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* Removed switch styles since we're removing the scroll ball */
 }
 
 @layer utilities {
   .container {
     @apply lg:max-w-6xl;
+    /* Fix for loading flash */
+    visibility: hidden;
+    animation: showContent 0.1s ease forwards;
+    animation-delay: 0.1s;
+  }
+}
+
+/* Fix HTML tags showing during page load */
+.hero-section {
+  opacity: 0;
+  animation: fadeInPage 0.8s ease-out forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes showContent {
+  to {
+    visibility: visible;
+  }
+}
+
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrolling for navigation */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading state improvements */
+body {
+  overflow-x: hidden;
+}
+
+/* Optimize animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

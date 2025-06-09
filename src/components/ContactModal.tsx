@@ -11,6 +11,7 @@ import StarIcon from "@/assets/icons/star.svg"
 interface ContactModalProps {
   isOpen: boolean
   onClose: () => void
+  initialMessage: string
 }
 
 interface FormData {
@@ -20,7 +21,7 @@ interface FormData {
   message: string
 }
 
-export const ContactModal = ({ isOpen, onClose }: ContactModalProps) => {
+export const ContactModal = ({ isOpen, onClose, initialMessage }: ContactModalProps) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",

@@ -1,4 +1,6 @@
-import darkSaasLandingPage from "@/assets/images/dark-saas-landing-page.png";
+"use client"
+
+import fintrack from "@/assets/images/fintrack.jpg";
 import lightSaasLandingPage from "@/assets/images/light-saas-landing-page.png";
 import aiStartupLandingPage from "@/assets/images/ai-startup-landing-page.png";
 import Image from "next/image";
@@ -7,96 +9,411 @@ import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import grainImage from "@/assets/images/grain.jpg"
 import { SectionHeader } from "@/components/SectionHeader";
 import GithubIcon from "@/assets/icons/github.svg"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { useRef, useState } from "react"
 
 const portfolioProjects = [
   {
-    company: "Innovative Co",
-    year: "2021",
-    title: "Light Saas Landing Page",
-    results: [
-      { title: "Boosted sales by 20%" },
-      { title: "Expanded customer reach by 35%" },
-      { title: "Increased brand awareness by 15%" },
-    ],
-    link: "#",
-    image: lightSaasLandingPage,
-  },
-  {
-    company: "Domain Project",
+    company: "Personal Project",
     year: "2024",
-    title: "Personal Finance Tracker",
+    title: "FinTrack - Personal Finance Manager",
+    description: "A comprehensive personal finance tracking application built with modern full-stack technologies.",
     results: [
-      { title: "Built with Spring Boot & Angular.js" },
-      { title: "Track & Categorize Expenses" },
-      { title: "Set Budgets & Goals" },
+      { title: "Built with Spring Boot & Angular", icon: "🔧" },
+      { title: "Real-time expense tracking", icon: "📊" },
+      { title: "Advanced budget analytics", icon: "📈" },
+      { title: "Multi-currency support", icon: "💱" }
     ],
+    technologies: ["Spring Boot", "Angular", "PostgreSQL", "JWT", "Docker"],
     link: "https://github.com/Swagat-D/FinTrack",
-    image: darkSaasLandingPage,
+    image: fintrack,
+    featured: true,
+    category: "Full-Stack",
+    status: "Live",
+    metrics: {
+      commits: "120+",
+      lines: "15K+",
+      features: "25+"
+    }
   },
   {
-    company: "Quantum Dynamics",
-    year: "2023",
-    title: "AI Startup Landing Page",
+    company: "Client Project",
+    year: "2023", 
+    title: "SaaS Landing Page - Light Theme",
+    description: "Modern, responsive landing page designed to convert visitors into customers.",
     results: [
-      { title: "Enhanced user experience by 40%" },
-      { title: "Improved site speed by 50%" },
-      { title: "Increased mobile traffic by 35%" },
+      { title: "Boosted conversion rates by 35%", icon: "📈" },
+      { title: "Improved user engagement by 50%", icon: "👥" },
+      { title: "Mobile-first responsive design", icon: "📱" },
+      { title: "Advanced SEO optimization", icon: "🔍" }
     ],
-    link: "#",
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    link: "https://github.com/Swagat-D",
+    image: lightSaasLandingPage,
+    featured: false,
+    category: "Frontend",
+    status: "Completed",
+    metrics: {
+      performance: "98/100",
+      accessibility: "100/100",
+      seo: "96/100"
+    }
+  },
+  {
+    company: "Innovation Lab",
+    year: "2023",
+    title: "AI Startup Landing Experience",
+    description: "Cutting-edge landing page for an AI startup with interactive elements and modern animations.",
+    results: [
+      { title: "Enhanced UX with AI interactions", icon: "🤖" },
+      { title: "50% faster load times", icon: "⚡" },
+      { title: "Interactive data visualizations", icon: "📊" },
+      { title: "Advanced animation system", icon: "✨" }
+    ],
+    technologies: ["React", "Three.js", "GSAP", "WebGL", "TypeScript"],
+    link: "https://github.com/Swagat-D",
     image: aiStartupLandingPage,
+    featured: true,
+    category: "Frontend",
+    status: "Live",
+    metrics: {
+      animations: "50+",
+      interactions: "15+",
+      components: "30+"
+    }
   },
 ];
 
 export const ProjectsSection = () => {
-  return (
-  <section className="pb-16 lg:py-24">
-    <div className="container">
-      <SectionHeader title="Featured Projects" eyebrow="Real-world Results" description="See, how I transformed concepts into engaging digital experiences."/>
-      <div className="flex flex-col mt-10 gap-20 md:mt-20 relative">
-        {portfolioProjects.map((project, projectIndex) => (
-          <div 
-          key={project.title} 
-          className="bg-gray-800 rounded-3xl z-0 overflow-hidden after:z-10 after:content-[''] after:absolute after:inset-0 after:outline-2 after:outline after:-outline-offset-2 after:rounded-3xl after:outline-white/20 px-8 pt-8 after:pointer-events-none md:pt-12 md:px-10 lg:pt-16 lg:px-20 sticky"
-          style={{
-            top: `calc(64px + ${projectIndex * 40}px)`
-          }}>
-            <div className="absolute inset-0 -z-10 opacity-5" style={{
-              backgroundImage: `url(${grainImage.src})`,
-            }}></div>
-            <div className="lg:grid lg:grid-cols-2 lg:gap-16">
-              <div className="lg:pb-16">
-              <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 text-transparent bg-clip-text font-bold uppercase tracking-widest text-sm ">
-              <span>{project.company}</span>
-              <span>&bull;</span>
-              <span>{project.year}</span>
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  })
 
-            </div>
-            <h3 className="font-serif text-2xl mt-2 md:text-4xl md:mt-5">{project.title}</h3>
-            <hr className="border-t-2 border-white/5 mt-4 md:mt-5"/> 
-            <ul className="flex flex-col gap-4 mt-4">
-              {project.results.map((result, idx) => (
-                <li key={idx} className="flex gap-2 text-sm md:text-base md:mt-5 text-white/50">
-                  <CheckCircleIcon className="size-5 md:size-6"/> 
-                  <span>{result.title}</span>
-                </li>
-              ))}
-            </ul>
-            <a href={project.link}>
-              <button className="bg-white text-gray-950 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8 md:w-auto px-6">
-                <GithubIcon className="size-5" />
-                <span>Github Repo</span>
-                <ArrowUpRightIcon className="size-4"/>
-              </button>
-            </a>
-            </div>
-            <div className="relative">
-            <Image src={project.image} alt={project.title} className="mt-8 lg:absolute lg:h-full -mb-4 md:-mb-0 lg:mt-0 lg:w-auto lg:max-w-none"/>
-            </div>
-            </div>
-          </div>
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+
+  const categories = ["All", "Frontend", "Full-Stack", "Mobile"]
+  
+  const filteredProjects = selectedCategory === "All" 
+    ? portfolioProjects 
+    : portfolioProjects.filter(project => project.category === selectedCategory)
+
+  const projectVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.9 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.6,
+        type: "spring",
+        stiffness: 100
+      }
+    }),
+    hover: {
+      y: -10,
+      scale: 1.02,
+      transition: { duration: 0.3, type: "spring", stiffness: 300 }
+    }
+  }
+
+  return (
+    <section id="projects" className="pb-16 lg:py-24 relative overflow-hidden" ref={containerRef}>
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/5 to-transparent" />
+      
+      {/* Floating Geometric Shapes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-32 h-32 border border-emerald-300/10 rounded-lg"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 20 + Math.random() * 10,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
         ))}
       </div>
-    </div>
-  </section>
+
+      <motion.div 
+        className="container relative z-10"
+        style={{ y, opacity }}
+      >
+        <SectionHeader 
+          title="Featured Projects" 
+          eyebrow="Portfolio Showcase" 
+          description="Explore my latest work showcasing technical expertise and creative problem-solving."
+        />
+
+        {/* Category Filter */}
+        <motion.div 
+          className="flex justify-center mt-12 mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <div className="flex gap-2 p-1 bg-gray-800/50 backdrop-blur-md rounded-full border border-white/10">
+            {categories.map((category) => (
+              <motion.button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 relative ${
+                  selectedCategory === category
+                    ? "text-gray-900"
+                    : "text-white/70 hover:text-white"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {selectedCategory === category && (
+                  <motion.div
+                    layoutId="activeCategory"
+                    className="absolute inset-0 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{category}</span>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Projects Grid */}
+        <div className="space-y-24">
+          <AnimatePresence mode="wait">
+            {filteredProjects.map((project, projectIndex) => (
+              <motion.div
+                key={project.title}
+                custom={projectIndex}
+                variants={projectVariants}
+                initial="hidden"
+                animate="visible"
+                whileHover="hover"
+                onHoverStart={() => setHoveredProject(projectIndex)}
+                onHoverEnd={() => setHoveredProject(null)}
+                className="group relative"
+              >
+                <div 
+                  className="bg-gray-800/80 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl sticky"
+                  style={{
+                    top: `calc(64px + ${projectIndex * 40}px)`
+                  }}
+                >
+                  {/* Project Badge */}
+                  {project.featured && (
+                    <div className="absolute top-6 left-6 z-20">
+                      <motion.div
+                        className="bg-gradient-to-r from-emerald-400 to-sky-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold"
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        ⭐ Featured
+                      </motion.div>
+                    </div>
+                  )}
+
+                  {/* Status Badge */}
+                  <div className="absolute top-6 right-6 z-20">
+                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      project.status === "Live" 
+                        ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                        : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                    }`}>
+                      <div className="flex items-center gap-1">
+                        <div className={`w-2 h-2 rounded-full ${
+                          project.status === "Live" ? "bg-green-400" : "bg-blue-400"
+                        }`} />
+                        {project.status}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="absolute inset-0 -z-10 opacity-5" style={{
+                    backgroundImage: `url(${grainImage.src})`,
+                  }} />
+
+                  <div className="lg:grid lg:grid-cols-2 lg:gap-16 p-8 md:p-12 lg:p-16">
+                    <div className="lg:pb-16">
+                      {/* Project Header */}
+                      <div className="space-y-4">
+                        <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 text-transparent bg-clip-text font-bold uppercase tracking-widest text-sm">
+                          <span>{project.company}</span>
+                          <span>&bull;</span>
+                          <span>{project.year}</span>
+                        </div>
+                        
+                        <h3 className="font-serif text-2xl md:text-4xl group-hover:text-emerald-300 transition-colors duration-300">
+                          {project.title}
+                        </h3>
+                        
+                        <p className="text-white/60 text-sm md:text-base leading-relaxed">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      <hr className="border-t-2 border-white/5 my-6" />
+
+                      {/* Results */}
+                      <ul className="space-y-4">
+                        {project.results.map((result, idx) => (
+                          <motion.li 
+                            key={idx} 
+                            className="flex gap-3 text-sm md:text-base text-white/70"
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.1 + idx * 0.1 }}
+                          >
+                            <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center text-gray-900 text-xs">
+                              {result.icon}
+                            </div>
+                            <span className="group-hover:text-white transition-colors duration-300">
+                              {result.title}
+                            </span>
+                          </motion.li>
+                        ))}
+                      </ul>
+
+                      {/* Technologies */}
+                      <div className="mt-6">
+                        <h4 className="text-sm font-semibold text-white/80 mb-3">Technologies Used</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {project.technologies.map((tech, idx) => (
+                            <motion.span
+                              key={tech}
+                              className="px-3 py-1 bg-white/10 rounded-full text-xs font-medium text-emerald-300 border border-emerald-300/20"
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.2 + idx * 0.05 }}
+                              whileHover={{ scale: 1.05, backgroundColor: "rgba(52, 211, 153, 0.1)" }}
+                            >
+                              {tech}
+                            </motion.span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Metrics */}
+                      <div className="mt-6 grid grid-cols-3 gap-4">
+                        {Object.entries(project.metrics).map(([key, value]) => (
+                          <div key={key} className="text-center p-3 bg-white/5 rounded-lg border border-white/10">
+                            <div className="text-emerald-300 font-bold text-lg">{value}</div>
+                            <div className="text-white/50 text-xs uppercase tracking-wider">{key}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Action Buttons */}
+                      <div className="flex gap-4 mt-8">
+                        <motion.a 
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          <button className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center gap-2 hover:from-emerald-400 hover:to-sky-500 transition-all duration-300 shadow-lg">
+                            <GithubIcon className="size-5" />
+                            <span>View Code</span>
+                            <ArrowUpRightIcon className="size-4" />
+                          </button>
+                        </motion.a>
+                        
+                        <motion.button 
+                          className="px-6 h-12 border border-white/20 rounded-xl text-white/70 hover:text-white hover:border-white/40 transition-all duration-300"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          Live Demo
+                        </motion.button>
+                      </div>
+                    </div>
+
+                    {/* Project Image */}
+                    <div className="relative mt-8 lg:mt-0">
+                      <motion.div 
+                        className="relative group/image"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Image 
+                          src={project.image} 
+                          alt={project.title} 
+                          className="w-full h-auto rounded-xl shadow-2xl group-hover/image:shadow-emerald-300/20 transition-shadow duration-300"
+                        />
+                        
+                        {/* Overlay on hover */}
+                        <motion.div 
+                          className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent rounded-xl opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                        />
+                        
+                        {/* Hover Info */}
+                        <motion.div 
+                          className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                        >
+                          <h4 className="font-semibold mb-1">🚀 {project.category} Project</h4>
+                          <p className="text-sm text-white/80">Click to explore the code</p>
+                        </motion.div>
+                      </motion.div>
+
+                      {/* Floating Elements */}
+                      {hoveredProject === projectIndex && (
+                        <motion.div
+                          className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full"
+                          initial={{ scale: 0, rotate: 0 }}
+                          animate={{ scale: 1, rotate: 360 }}
+                          exit={{ scale: 0 }}
+                          transition={{ duration: 0.5 }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Call to Action */}
+        <motion.div 
+          className="text-center mt-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <h3 className="text-2xl font-serif mb-4">Interested in working together?</h3>
+          <p className="text-white/60 mb-6">Let&#39;s create something amazing</p>
+          <motion.button
+            className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 px-8 py-3 rounded-xl font-semibold hover:from-emerald-400 hover:to-sky-500 transition-all duration-300"
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(52, 211, 153, 0.3)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => {
+              const contactSection = document.querySelector("#contact")
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: "smooth", block: "start" })
+              }
+            }}
+          >
+            Get In Touch
+          </motion.button>
+        </motion.div>
+      </motion.div>
+    </section>
   )
-};
+}

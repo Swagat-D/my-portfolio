@@ -1,331 +1,345 @@
 "use client"
 
-import { SectionHeader } from "@/components/SectionHeader"
-import { Card } from "@/components/Card"
-import bookImage from "@/assets/images/book-cover.png"
-import Image from "next/image"
-import JavascriptIcon from "@/assets/icons/square-js.svg"
-import ReactIcon from "@/assets/icons/react.svg"
-import NextIcon from "@/assets/icons/nextJs.svg"
-import GithubIcon from "@/assets/icons/github.svg"
-import NodejsIcon from "@/assets/icons/nodejs.svg"
-import DevopsIcon from "@/assets/icons/devops.svg"
-import MapImage from "@/assets/images/map.png"
-import smileemoji from "@/assets/images/memoji-smile.png"
-import { CardHeader } from "@/components/CardHeader"
-import { ToolboxItem } from "@/components/ToolboxItem"
 import { motion, AnimatePresence } from "framer-motion"
-import { useRef, useState } from "react"
+import { useState, useRef } from "react"
+import { Card } from "@/components/Card"
+import { SectionHeader } from "@/components/SectionHeader"
 
-const toolboxItems = [
-  {
-    title: "JavaScript",
-    iconType: JavascriptIcon,
-  },
-  {
-    title: "ReactJs",
-    iconType: ReactIcon,
-  },
-  {
-    title: "Next.Js",
-    iconType: NextIcon,
-  },
-  {
-    title: "Github",
-    iconType: GithubIcon,
-  },
-  {
-    title: "NodeJs",
-    iconType: NodejsIcon,
-  },
-  {
-    title: "Devops",
-    iconType: DevopsIcon,
-  },
-]
+// Tech Stack Data
+const techStack = {
+  frontend: [
+    { name: "React", level: 95, icon: "⚛️", color: "from-blue-400 to-cyan-400", description: "Advanced component architecture & hooks" },
+    { name: "Next.js", level: 90, icon: "🔺", color: "from-gray-700 to-gray-900", description: "SSR, SSG, and full-stack development" },
+    { name: "TypeScript", level: 88, icon: "📘", color: "from-blue-600 to-blue-800", description: "Type-safe applications at scale" },
+    { name: "Tailwind CSS", level: 92, icon: "🎨", color: "from-cyan-400 to-blue-500", description: "Rapid UI development & design systems" },
+    { name: "Framer Motion", level: 85, icon: "✨", color: "from-purple-400 to-pink-400", description: "Complex animations & interactions" }
+  ],
+  backend: [
+    { name: "Node.js", level: 87, icon: "🟢", color: "from-green-400 to-green-600", description: "Scalable server-side applications" },
+    { name: "Spring Boot", level: 82, icon: "🍃", color: "from-green-500 to-green-700", description: "Enterprise Java applications" },
+    { name: "Python", level: 80, icon: "🐍", color: "from-yellow-400 to-green-400", description: "Data processing & web development" },
+    { name: "PostgreSQL", level: 85, icon: "🐘", color: "from-blue-500 to-indigo-600", description: "Complex database design & optimization" },
+    { name: "MongoDB", level: 78, icon: "🍃", color: "from-green-600 to-green-800", description: "NoSQL database management" }
+  ],
+  tools: [
+    { name: "Docker", level: 83, icon: "🐳", color: "from-blue-400 to-blue-600", description: "Containerization & deployment" },
+    { name: "AWS", level: 75, icon: "☁️", color: "from-orange-400 to-orange-600", description: "Cloud infrastructure & services" },
+    { name: "Git", level: 90, icon: "📚", color: "from-red-400 to-red-600", description: "Version control & collaboration" },
+    { name: "Figma", level: 85, icon: "🎭", color: "from-purple-400 to-purple-600", description: "UI/UX design & prototyping" },
+    { name: "Jest", level: 80, icon: "🧪", color: "from-red-500 to-pink-500", description: "Testing & quality assurance" }
+  ]
+} as const;
 
-const hobbies = [
+const achievements = [
   {
-    title: "Gaming",
-    emoji: "🎮",
-    left: " 5%",
-    top: " 5%",
+    title: "Projects Completed",
+    value: "25+",
+    icon: "🚀",
+    description: "Successfully delivered projects"
   },
   {
-    title: "Photography",
-    emoji: "📷",
-    left: " 50%",
-    top: " 5%",
+    title: "Technologies Mastered",
+    value: "15+",
+    icon: "💻",
+    description: "Programming languages & frameworks"
   },
   {
-    title: "Music",
-    emoji: "🎧",
-    left: "35% ",
-    top: " 40%",
+    title: "Years of Experience",
+    value: "2+",
+    icon: "⏱️",
+    description: "Continuous learning & growth"
   },
   {
-    title: "Travel",
-    emoji: "✈️",
-    left: "10% ",
-    top: " 35%",
-  },
-
-  {
-    title: "Fitness",
-    emoji: "🏋️‍♂️",
-    left: " 70%",
-    top: "45% ",
-  },
-  {
-    title: "Reading",
-    emoji: "📚",
-    left: "5% ",
-    top: " 65%",
-  },
-  {
-    title: "Sports",
-    emoji: "🏸",
-    left: " 45%",
-    top: "70% ",
-  },
-]
-
-const bhubaneswarFacts = [
-  { icon: "🏛️", text: "Temple City" },
-  { icon: "🌅", text: "Ancient Capital" },
-  { icon: "🎯", text: "Smart City" },
-  { icon: "🦎", text: "Cave Heritage" },
-]
-
-const bookStats = [
-  { label: "Pages Read", value: "2,847", icon: "📖" },
-  { label: "Books This Year", value: "12", icon: "📚" },
-  { label: "Favorite Genre", value: "Tech", icon: "💻" },
-]
-
-export const AboutSection = () => {
-  const constraintRef = useRef(null)
-  const [showLocationInfo, setShowLocationInfo] = useState(false)
-  const [bookHovered, setBookHovered] = useState(false)
-
-  const handleMapClick = () => {
-    setShowLocationInfo(true)
-    setTimeout(() => {
-      setShowLocationInfo(false)
-    }, 5000)
+    title: "Client Satisfaction",
+    value: "100%",
+    icon: "⭐",
+    description: "Positive feedback & ratings"
   }
+];
 
-  return (
-    <div className="py-20 lg:py-28">
-      <div className="container">
-        <SectionHeader
-          eyebrow="About Me"
-          title="A Glimpse into My World"
-          description="Learn more about who I am, what I do and what inspires me."
-        />
-        <div className="mt-20 flex flex-col gap-8">
-          <div className="md:grid md:grid-cols-5 md:gap-8 lg:grid-cols-3">
-            <Card className="h-[320px] col-span-2 lg:col-span-1 overflow-hidden group">
-              <CardHeader title="My Reads" description="Explore the books shaping my perspectives." />
-              
-              <div className="relative">
-                <motion.div
-                  className="w-40 mx-auto mt-4 relative cursor-pointer"
-                  whileHover={{ scale: 1.05, rotateY: 15 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                >
-                  <Image 
-                    src={bookImage} 
-                    alt="Book Cover" 
-                    className="relative z-10 rounded-lg shadow-xl transition-shadow duration-300 group-hover:shadow-emerald-300/20" 
-                  />
-                  
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-tr from-emerald-300/20 to-sky-400/20 rounded-lg blur-xl"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [0, 1, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  
-                  {[...Array(6)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="absolute size-2 bg-emerald-300 rounded-full"
-                      initial={{ opacity: 0, scale: 0 }}
-                      animate={{
-                        opacity: [0, 1, 0],
-                        scale: [0, 1, 0],
-                        x: [0, (Math.random() - 0.5) * 100],
-                        y: [0, (Math.random() - 0.5) * 100],
-                      }}
-                      transition={{
-                        duration: 2,
-                        delay: i * 0.2,
-                        repeat: Infinity,
-                        repeatDelay: 1,
-                      }}
-                    />
-                  ))}
-                </motion.div>
+interface Skill {
+  name: string;
+  level: number;
+  icon: string;
+  color: string;
+  description: string;
+}
 
-                <motion.div className="mt-6 space-y-3">
-                  {bookStats.map((stat, index) => (
-                    <motion.div
-                      key={stat.label}
-                      className="flex items-center justify-between text-xs bg-white/5 rounded-lg p-2"
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 + index * 0.1 }}
-                      whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.1)" }}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{stat.icon}</span>
-                        <span className="text-white/70">{stat.label}</span>
-                      </div>
-                      <motion.span 
-                        className="font-semibold text-emerald-300"
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        {stat.value}
-                      </motion.span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </Card>
+interface SkillCardProps {
+  skill: Skill;
+  index: number;
+  hoveredSkill: string | null;
+  setHoveredSkill: (skill: string | null) => void;
+}
 
-            <Card className="h-[320px] p-0 col-span-3 lg:col-span-2 md:mt-0 sm:mt-8">
-              <CardHeader
-                title="My ToolBox"
-                description="Explore the technologies and tools I used to craft exceptional digital experiences."
-                className="px-6 pt-6"
-              />
-              <ToolboxItem
-                items={toolboxItems}
-                className="mt-6"
-                itemsWrapperClassName="animate-move-left [animation-duration:30s]"
-              />
-              <ToolboxItem
-                items={toolboxItems}
-                className="mt-6"
-                itemsWrapperClassName="animate-move-right [animation-duration:15s]"
-              />
-            </Card>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-3 gap-8">
-            <Card className="h-[320px] p-0 flex flex-col md:col-span-3 lg:col-span-2">
-              <CardHeader
-                title="Beyond The Code"
-                description="Explore my interests and hobbies beyond the digital realm."
-                className="px-6 py-6"
-              />
-              <div className="relative flex-1" ref={constraintRef}>
-                {hobbies.map((hobby) => (
-                  <motion.div
-                    key={hobby.title}
-                    className="inline-flex gap-2 px-6 bg-gradient-to-tr from-emerald-300 to-sky-400 rounded-full py-1.5 absolute"
-                    style={{
-                      left: hobby.left,
-                      top: hobby.top,
-                    }}
-                    drag
-                    dragConstraints={constraintRef}
-                  >
-                    <span className="font-medium text-gray-950">{hobby.title}</span>
-                    <span>{hobby.emoji}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </Card>
-            <Card className="h-[320px] p-0 relative md:col-span-2 lg:col-span-1 overflow-hidden">
-              <Image
-                src={MapImage || "/placeholder.svg"}
-                alt="map"
-                className="h-full w-full object-cover object-left-top cursor-pointer transition-transform hover:scale-105"
-                onClick={handleMapClick}
-              />
-
-              <div
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-20 rounded-full after:content-[''] after:absolute after:inset-0 after:outline after:outline-2 after:outline-offset-2 after:rounded-full after:outline-gray-950/30 cursor-pointer"
-                onClick={handleMapClick}
-              >
-                <div className="absolute -z-20 inset-0 rounded-full bg-gradient-to-tr from-emerald-300 to-sky-400 animate-ping [animation-duration:2s]"></div>
-                <div className="absolute -z-10 inset-0 rounded-full bg-gradient-to-tr from-emerald-300 to-sky-400 "></div>
-                <Image src={smileemoji || "/placeholder.svg"} alt="smiling emoji" className="size-20" />
-              </div>
-
-              <AnimatePresence>
-                {showLocationInfo && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.8 }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-black/95 backdrop-blur-sm flex flex-col items-center justify-center p-3 z-20"
-                  >
-                    <motion.div
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      className="text-center space-y-3 w-full max-w-full"
-                    >
-                      <div className="space-y-1">
-                        <div className="text-lg font-bold text-white flex items-center justify-center gap-1">
-                          <span>📍</span>
-                          <span className="text-sm">Bhubaneswar</span>
-                        </div>
-                        <div className="text-xs text-emerald-300 font-medium">Temple City of India</div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-1.5 w-full">
-                        {bhubaneswarFacts.map((fact, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.05 + 0.2 }}
-                            className="flex items-center gap-1.5 text-xs text-white/90 bg-white/10 rounded-lg p-2 backdrop-blur-sm"
-                          >
-                            <span className="text-sm">{fact.icon}</span>
-                            <span className="font-medium text-[10px] leading-tight">{fact.text}</span>
-                          </motion.div>
-                        ))}
-                      </div>
-
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="text-[10px] text-white/70 italic leading-tight px-2"
-                      >
-                        &quot;Where ancient heritage meets modern innovation&quot;
-                      </motion.div>
-
-                      <motion.button
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.5 }}
-                        onClick={() => setShowLocationInfo(false)}
-                        className="mt-2 px-3 py-1.5 bg-gradient-to-r from-emerald-400 to-sky-400 text-gray-900 rounded-full text-xs font-semibold hover:scale-105 transition-transform"
-                      >
-                        Close
-                      </motion.button>
-                    </motion.div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {!showLocationInfo && (
-                <div className="absolute bottom-2 left-2 right-2 text-center">
-                  <div className="text-xs text-white/70 bg-black/60 rounded-full px-3 py-1 backdrop-blur-sm">
-                    Click to explore 🌟
-                  </div>
-                </div>
-              )}
-            </Card>
+const SkillCard = ({ skill, index, hoveredSkill, setHoveredSkill }: SkillCardProps) => (
+  <motion.div
+    className="group relative"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.1 }}
+    onHoverStart={() => setHoveredSkill(skill.name)}
+    onHoverEnd={() => setHoveredSkill(null)}
+    whileHover={{ scale: 1.02 }}
+  >
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4 hover:border-white/20 transition-all duration-300 group-hover:bg-white/10">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">{skill.icon}</span>
+          <div>
+            <h4 className="font-semibold text-white">{skill.name}</h4>
+            <p className="text-xs text-white/60">{skill.description}</p>
           </div>
         </div>
+        <div className="text-right">
+          <div className="text-lg font-bold text-emerald-300">{skill.level}%</div>
+          <div className="text-xs text-white/60">Proficiency</div>
+        </div>
+      </div>
+      
+      {/* Progress Bar */}
+      <div className="relative h-2 bg-gray-700 rounded-full overflow-hidden">
+        <motion.div
+          className={`absolute inset-y-0 left-0 bg-gradient-to-r ${skill.color} rounded-full`}
+          initial={{ width: 0 }}
+          animate={{ width: `${skill.level}%` }}
+          transition={{ duration: 1, delay: index * 0.1 + 0.5, ease: "easeOut" }}
+        />
+        
+        {/* Glow effect */}
+        <motion.div
+          className={`absolute inset-y-0 left-0 bg-gradient-to-r ${skill.color} rounded-full blur-sm opacity-50`}
+          initial={{ width: 0 }}
+          animate={{ width: hoveredSkill === skill.name ? `${skill.level}%` : "0%" }}
+          transition={{ duration: 0.3 }}
+        />
       </div>
     </div>
+  </motion.div>
+);
+
+export const AboutSection = () => {
+  const [activeCategory, setActiveCategory] = useState<keyof typeof techStack>("frontend");
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const constraintRef = useRef<HTMLDivElement>(null);
+
+  const categories = [
+    { id: "frontend" as const, label: "Frontend", icon: "🎨", description: "User Interface & Experience" },
+    { id: "backend" as const, label: "Backend", icon: "⚙️", description: "Server & Database" },
+    { id: "tools" as const, label: "Tools & DevOps", icon: "🛠️", description: "Development & Deployment" }
+  ];
+
+  return (
+    <section id="about" className="py-20 lg:py-28 relative overflow-hidden">
+      {/* Background Animation */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-px h-32 bg-gradient-to-b from-emerald-300/20 via-emerald-300/5 to-transparent"
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${10 + (i % 2) * 40}%`,
+            }}
+            animate={{
+              scaleY: [1, 1.5, 1],
+              opacity: [0.3, 0.7, 0.3],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="container relative z-10">
+        <SectionHeader
+          eyebrow="Technical Expertise"
+          title="Skills & Technologies"
+          description="A comprehensive overview of my technical stack and capabilities."
+        />
+
+        {/* Achievements Grid */}
+        <motion.div 
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16 mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          {achievements.map((achievement, index) => (
+            <motion.div
+              key={achievement.title}
+              className="text-center p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/10 rounded-xl hover:border-emerald-300/30 transition-all duration-300"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 * index }}
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: "0 10px 30px rgba(52, 211, 153, 0.2)"
+              }}
+            >
+              <div className="text-3xl mb-2">{achievement.icon}</div>
+              <div className="text-2xl font-bold text-emerald-300 mb-1">{achievement.value}</div>
+              <div className="text-sm font-semibold text-white mb-1">{achievement.title}</div>
+              <div className="text-xs text-white/60">{achievement.description}</div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Category Selector */}
+        <motion.div 
+          className="flex justify-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="flex gap-2 p-1 bg-gray-800/80 backdrop-blur-md rounded-full border border-white/10">
+            {categories.map((category) => (
+              <motion.button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`px-6 py-3 rounded-full text-sm font-semibold transition-all duration-300 relative ${
+                  activeCategory === category.id
+                    ? "text-gray-900"
+                    : "text-white/70 hover:text-white"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {activeCategory === category.id && (
+                  <motion.div
+                    layoutId="activeSkillCategory"
+                    className="absolute inset-0 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <div className="relative z-10 flex items-center gap-2">
+                  <span>{category.icon}</span>
+                  <div className="text-left">
+                    <div>{category.label}</div>
+                    {activeCategory === category.id && (
+                      <div className="text-xs opacity-80">{category.description}</div>
+                    )}
+                  </div>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Skills Grid */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {techStack[activeCategory].map((skill, index) => (
+              <SkillCard 
+                key={skill.name} 
+                skill={skill} 
+                index={index}
+                hoveredSkill={hoveredSkill}
+                setHoveredSkill={setHoveredSkill}
+              />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Interactive Learning Journey */}
+        <motion.div 
+          className="mt-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <Card className="p-8">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-serif mb-4">Continuous Learning Journey</h3>
+              <p className="text-white/60">Always exploring new technologies and expanding my skill set</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { title: "Currently Learning", items: ["AI/ML", "Web3", "Rust"], icon: "📚", color: "from-yellow-400 to-orange-400" },
+                { title: "Next in Queue", items: ["Go", "Swift", "Kubernetes"], icon: "🎯", color: "from-blue-400 to-purple-400" },
+                { title: "Certifications", items: ["AWS", "Google Cloud", "Azure"], icon: "🏆", color: "from-green-400 to-emerald-400" }
+              ].map((section, index) => (
+                <motion.div
+                  key={section.title}
+                  className="text-center p-6 bg-white/5 rounded-xl border border-white/10"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9 + index * 0.1 }}
+                  whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.1)" }}
+                >
+                  <div className={`text-3xl mb-3 bg-gradient-to-r ${section.color} bg-clip-text text-transparent`}>
+                    {section.icon}
+                  </div>
+                  <h4 className="font-semibold mb-3">{section.title}</h4>
+                  <div className="space-y-2">
+                    {section.items.map((item) => (
+                      <div
+                        key={item}
+                        className="text-sm text-white/70 bg-white/5 rounded-full py-1 px-3"
+                      >
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </Card>
+        </motion.div>
+
+        {/* Skills Visualization */}
+        {/* Replace the entire skill map section with this */}
+<motion.div 
+  className="mt-16 text-center"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 1.2 }}
+>
+  <h3 className="text-xl font-serif mb-4">Interactive Skill Map</h3>
+  <p className="text-white/60 mb-8">Drag skills around to explore connections</p>
+  
+  <div className="relative h-64 overflow-hidden" ref={constraintRef}>
+    {Object.values(techStack).flat().slice(0, 12).map((skill, index) => (
+      <motion.div
+        key={skill.name}
+        className="absolute cursor-pointer group"
+        style={{
+          left: `${10 + (index % 6) * 15}%`,
+          top: `${20 + Math.floor(index / 6) * 40}%`,
+        }}
+        drag
+        dragConstraints={constraintRef}
+        whileHover={{ scale: 1.2 }}
+        whileDrag={{ scale: 1.1 }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1.5 + index * 0.05 }} // Reduced delay
+      >
+        <div className={`w-16 h-16 rounded-full bg-gradient-to-r ${skill.color} flex items-center justify-center text-2xl shadow-lg transition-shadow duration-200`}>
+          {skill.icon}
+        </div>
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs font-medium text-white/80 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          {skill.name}
+        </div>
+        
+        {/* Simplified hover effect */}
+        <div className="absolute inset-0 rounded-full border-2 border-emerald-300/0 group-hover:border-emerald-300/50 scale-110 transition-colors duration-200" />
+      </motion.div>
+    ))}
+  </div>
+</motion.div>
+      </div>
+    </section>
   )
 }
