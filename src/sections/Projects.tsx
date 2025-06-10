@@ -30,11 +30,6 @@ const portfolioProjects = [
     featured: true,
     category: "Full-Stack",
     status: "Live",
-    metrics: {
-      commits: "120+",
-      lines: "15K+",
-      features: "25+"
-    }
   },
   {
     company: "Client Project",
@@ -53,11 +48,6 @@ const portfolioProjects = [
     featured: false,
     category: "Frontend",
     status: "Completed",
-    metrics: {
-      performance: "98/100",
-      accessibility: "100/100",
-      seo: "96/100"
-    }
   },
   {
     company: "Innovation Lab",
@@ -76,11 +66,6 @@ const portfolioProjects = [
     featured: true,
     category: "Frontend",
     status: "Live",
-    metrics: {
-      animations: "50+",
-      interactions: "15+",
-      components: "30+"
-    }
   },
 ];
 
@@ -161,41 +146,34 @@ export const ProjectsSection = () => {
           description="Explore my latest work showcasing technical expertise and creative problem-solving."
         />
 
-        {/* Category Filter */}
+        {/* Category Filter - Simple Design */}
         <motion.div 
-          className="flex justify-center mt-12 mb-16"
+          className="flex justify-center mt-12 mb-16 px-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="flex gap-2 p-1 bg-gray-800/50 backdrop-blur-md rounded-full border border-white/10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 w-full max-w-2xl lg:max-w-4xl">
             {categories.map((category) => (
               <motion.button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 relative ${
+                className={`px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 relative ${
                   selectedCategory === category
-                    ? "text-gray-900"
-                    : "text-white/70 hover:text-white"
+                    ? "bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900"
+                    : "bg-white/5 text-white/70 hover:text-white hover:bg-white/10 border border-white/10"
                 }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {selectedCategory === category && (
-                  <motion.div
-                    layoutId="activeCategory"
-                    className="absolute inset-0 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
                 <span className="relative z-10">{category}</span>
               </motion.button>
             ))}
           </div>
         </motion.div>
 
-        {/* Projects Grid */}
-        <div className="space-y-24">
+        {/* Projects Grid - Stacking Animation */}
+        <div className="relative">
           <AnimatePresence mode="wait">
             {filteredProjects.map((project, projectIndex) => (
               <motion.div
@@ -207,19 +185,33 @@ export const ProjectsSection = () => {
                 whileHover="hover"
                 onHoverStart={() => setHoveredProject(projectIndex)}
                 onHoverEnd={() => setHoveredProject(null)}
-                className="group relative"
+                className="group relative mb-8"
+                style={{
+                  zIndex: filteredProjects.length - projectIndex
+                }}
               >
-                <div 
-                  className="bg-gray-800/80 backdrop-blur-xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl sticky"
+                <motion.div 
+                  className="bg-gray-800/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-white/10 overflow-hidden shadow-2xl sticky"
                   style={{
-                    top: `calc(64px + ${projectIndex * 40}px)`
+                    top: `calc(80px + ${projectIndex * 30}px)`,
+                  }}
+                  whileInView={{
+                    scale: [0.95, 1],
+                    y: [50, 0],
+                  }}
+                  viewport={{ once: true }}
+                  transition={{
+                    duration: 0.6,
+                    delay: projectIndex * 0.2,
+                    type: "spring",
+                    stiffness: 100
                   }}
                 >
                   {/* Project Badge */}
                   {project.featured && (
-                    <div className="absolute top-6 left-6 z-20">
+                    <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-20">
                       <motion.div
-                        className="bg-gradient-to-r from-emerald-400 to-sky-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold"
+                        className="bg-gradient-to-r from-emerald-400 to-sky-400 text-gray-900 px-2 sm:px-3 py-1 rounded-full text-xs font-bold"
                         animate={{ scale: [1, 1.05, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
@@ -229,8 +221,8 @@ export const ProjectsSection = () => {
                   )}
 
                   {/* Status Badge */}
-                  <div className="absolute top-6 right-6 z-20">
-                    <div className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  <div className="absolute top-4 sm:top-6 right-4 sm:right-6 z-20">
+                    <div className={`px-2 sm:px-3 py-1 rounded-full text-xs font-semibold ${
                       project.status === "Live" 
                         ? "bg-green-500/20 text-green-400 border border-green-500/30"
                         : "bg-blue-500/20 text-blue-400 border border-blue-500/30"
@@ -239,7 +231,7 @@ export const ProjectsSection = () => {
                         <div className={`w-2 h-2 rounded-full ${
                           project.status === "Live" ? "bg-green-400" : "bg-blue-400"
                         }`} />
-                        {project.status}
+                        <span className="hidden sm:inline">{project.status}</span>
                       </div>
                     </div>
                   </div>
@@ -248,38 +240,40 @@ export const ProjectsSection = () => {
                     backgroundImage: `url(${grainImage.src})`,
                   }} />
 
-                  <div className="lg:grid lg:grid-cols-2 lg:gap-16 p-8 md:p-12 lg:p-16">
-                    <div className="lg:pb-16">
+                  {/* Responsive Grid Layout */}
+                  <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-16 p-4 sm:p-8 md:p-12 lg:p-16">
+                    {/* Content Section */}
+                    <div className="order-2 lg:order-1 lg:pb-16">
                       {/* Project Header */}
-                      <div className="space-y-4">
-                        <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 text-transparent bg-clip-text font-bold uppercase tracking-widest text-sm">
+                      <div className="space-y-3 sm:space-y-4">
+                        <div className="bg-gradient-to-r from-emerald-300 to-sky-400 inline-flex gap-2 text-transparent bg-clip-text font-bold uppercase tracking-widest text-xs sm:text-sm">
                           <span>{project.company}</span>
                           <span>&bull;</span>
                           <span>{project.year}</span>
                         </div>
                         
-                        <h3 className="font-serif text-2xl md:text-4xl group-hover:text-emerald-300 transition-colors duration-300">
+                        <h3 className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl group-hover:text-emerald-300 transition-colors duration-300 leading-tight">
                           {project.title}
                         </h3>
                         
-                        <p className="text-white/60 text-sm md:text-base leading-relaxed">
+                        <p className="text-white/60 text-sm sm:text-base leading-relaxed">
                           {project.description}
                         </p>
                       </div>
 
-                      <hr className="border-t-2 border-white/5 my-6" />
+                      <hr className="border-t-2 border-white/5 my-4 sm:my-6" />
 
                       {/* Results */}
-                      <ul className="space-y-4">
+                      <ul className="space-y-3 sm:space-y-4">
                         {project.results.map((result, idx) => (
                           <motion.li 
                             key={idx} 
-                            className="flex gap-3 text-sm md:text-base text-white/70"
+                            className="flex gap-2 sm:gap-3 text-sm sm:text-base text-white/70"
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.1 + idx * 0.1 }}
                           >
-                            <div className="flex-shrink-0 w-6 h-6 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center text-gray-900 text-xs">
+                            <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full flex items-center justify-center text-gray-900 text-xs">
                               {result.icon}
                             </div>
                             <span className="group-hover:text-white transition-colors duration-300">
@@ -290,13 +284,13 @@ export const ProjectsSection = () => {
                       </ul>
 
                       {/* Technologies */}
-                      <div className="mt-6">
-                        <h4 className="text-sm font-semibold text-white/80 mb-3">Technologies Used</h4>
-                        <div className="flex flex-wrap gap-2">
+                      <div className="mt-4 sm:mt-6">
+                        <h4 className="text-sm font-semibold text-white/80 mb-2 sm:mb-3">Technologies Used</h4>
+                        <div className="flex flex-wrap gap-1.5 sm:gap-2">
                           {project.technologies.map((tech, idx) => (
                             <motion.span
                               key={tech}
-                              className="px-3 py-1 bg-white/10 rounded-full text-xs font-medium text-emerald-300 border border-emerald-300/20"
+                              className="px-2 sm:px-3 py-1 bg-white/10 rounded-full text-xs font-medium text-emerald-300 border border-emerald-300/20"
                               initial={{ opacity: 0, scale: 0.8 }}
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: 0.2 + idx * 0.05 }}
@@ -308,18 +302,8 @@ export const ProjectsSection = () => {
                         </div>
                       </div>
 
-                      {/* Metrics */}
-                      <div className="mt-6 grid grid-cols-3 gap-4">
-                        {Object.entries(project.metrics).map(([key, value]) => (
-                          <div key={key} className="text-center p-3 bg-white/5 rounded-lg border border-white/10">
-                            <div className="text-emerald-300 font-bold text-lg">{value}</div>
-                            <div className="text-white/50 text-xs uppercase tracking-wider">{key}</div>
-                          </div>
-                        ))}
-                      </div>
-
                       {/* Action Buttons */}
-                      <div className="flex gap-4 mt-8">
+                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8">
                         <motion.a 
                           href={project.link}
                           target="_blank"
@@ -329,14 +313,14 @@ export const ProjectsSection = () => {
                           whileTap={{ scale: 0.98 }}
                         >
                           <button className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 h-12 w-full rounded-xl font-semibold inline-flex items-center justify-center gap-2 hover:from-emerald-400 hover:to-sky-500 transition-all duration-300 shadow-lg">
-                            <GithubIcon className="size-5" />
+                            <GithubIcon className="size-4 sm:size-5" />
                             <span>View Code</span>
                             <ArrowUpRightIcon className="size-4" />
                           </button>
                         </motion.a>
                         
                         <motion.button 
-                          className="px-6 h-12 border border-white/20 rounded-xl text-white/70 hover:text-white hover:border-white/40 transition-all duration-300"
+                          className="px-4 sm:px-6 h-12 border border-white/20 rounded-xl text-white/70 hover:text-white hover:border-white/40 transition-all duration-300"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -346,7 +330,7 @@ export const ProjectsSection = () => {
                     </div>
 
                     {/* Project Image */}
-                    <div className="relative mt-8 lg:mt-0">
+                    <div className="relative order-1 lg:order-2 mb-6 lg:mb-0 lg:mt-0">
                       <motion.div 
                         className="relative group/image"
                         whileHover={{ scale: 1.05 }}
@@ -355,27 +339,27 @@ export const ProjectsSection = () => {
                         <Image 
                           src={project.image} 
                           alt={project.title} 
-                          className="w-full h-auto rounded-xl shadow-2xl group-hover/image:shadow-emerald-300/20 transition-shadow duration-300"
+                          className="w-full h-auto rounded-lg sm:rounded-xl shadow-2xl group-hover/image:shadow-emerald-300/20 transition-shadow duration-300"
                         />
                         
                         {/* Overlay on hover */}
                         <motion.div 
-                          className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent rounded-xl opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                          className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent rounded-lg sm:rounded-xl opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
                         />
                         
                         {/* Hover Info */}
                         <motion.div 
-                          className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
+                          className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 text-white opacity-0 group-hover/image:opacity-100 transition-opacity duration-300"
                         >
-                          <h4 className="font-semibold mb-1">🚀 {project.category} Project</h4>
-                          <p className="text-sm text-white/80">Click to explore the code</p>
+                          <h4 className="font-semibold text-sm sm:text-base mb-1">🚀 {project.category} Project</h4>
+                          <p className="text-xs sm:text-sm text-white/80">Click to explore the code</p>
                         </motion.div>
                       </motion.div>
 
                       {/* Floating Elements */}
                       {hoveredProject === projectIndex && (
                         <motion.div
-                          className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full"
+                          className="absolute -top-2 sm:-top-4 -right-2 sm:-right-4 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-r from-emerald-300 to-sky-400 rounded-full"
                           initial={{ scale: 0, rotate: 0 }}
                           animate={{ scale: 1, rotate: 360 }}
                           exit={{ scale: 0 }}
@@ -384,7 +368,7 @@ export const ProjectsSection = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -392,15 +376,15 @@ export const ProjectsSection = () => {
 
         {/* Call to Action */}
         <motion.div 
-          className="text-center mt-20"
+          className="text-center mt-16 sm:mt-20 px-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <h3 className="text-2xl font-serif mb-4">Interested in working together?</h3>
+          <h3 className="text-xl sm:text-2xl font-serif mb-4">Interested in working together?</h3>
           <p className="text-white/60 mb-6">Let&#39;s create something amazing</p>
           <motion.button
-            className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 px-8 py-3 rounded-xl font-semibold hover:from-emerald-400 hover:to-sky-500 transition-all duration-300"
+            className="bg-gradient-to-r from-emerald-300 to-sky-400 text-gray-900 px-6 sm:px-8 py-3 rounded-xl font-semibold hover:from-emerald-400 hover:to-sky-500 transition-all duration-300"
             whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(52, 211, 153, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {

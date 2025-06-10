@@ -9,9 +9,12 @@ const config: Config = {
   ],
   theme: {
     screens: {
-      sm: "375px",
-      md: "768px",
-      lg: "1200px",
+      xs: '320px',    // Extra small phones (iPhone SE, older Android)
+      sm: "375px",    // Standard mobile phones (iPhone 12/13/14 standard)
+      md: "768px",    // Tablets (iPad, Android tablets)
+      lg: "1200px",   // Laptops and desktops
+      xl: "1440px",   // Large desktops
+      "2xl": "1920px",
     },
     container: {
       center: true,
